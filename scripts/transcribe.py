@@ -5,6 +5,7 @@ import json
 import re
 import whisper
 from settings import *
+import time
 
 def extract_video_id(url):
     pattern = r'(?:https?:\/\/)?(?:www\.)?youtu(?:\.be|be\.com)\/(?:.*v(?:\/|=)|(?:.*\/)?)([\w\-]+)'
@@ -24,12 +25,15 @@ def download(url, resolution, videos_path):
     resolution = str(resolution) + "p"
     file_name = extract_video_id(url)
     if file_name:
+        start = time.time()
         file_name = file_name + ".mp4"
         file_path = os.path.join(videos_path, file_name)
         print("Downloading", url)
         yt = YouTube(url)
         yt.streams.filter(res = resolution, progressive= True).first().download(videos_path, file_name)
         print("Downloaded to", file_path)
+        end = time.time()
+        print("Downloaded in", end - start, "seconds")
         return {
             "filename": file_name,
             "title": yt.title
@@ -38,9 +42,12 @@ def download(url, resolution, videos_path):
 
 def transcribe(model, video_path, save):
     print("Transcribing", video_path)
+    start = time.time()
     result = model.transcribe(video_path)    
     text = [item["text"] for item in result["segments"]]
     text = "".join(text)
+    end = time.time()
+    print("Transcribed in", end - start, "seconds")
     if not save:
         os.remove(video_path)
     return text
@@ -65,8 +72,6 @@ if __name__ == "__main__":
     parser.add_argument("--res", type=int, required=False, help="The resolution of the video(s) to download", default=360)
     parser.add_argument('--no-save', action='store_false', dest="save", help='Add this to remove the video(s) from the local storage after transcription.')
     parser.add_argument('--local', action='store_true', dest="local", help='Add this to use local files instead of downloading from youtube.')
-    #parser.add_argument('--verbose', action='store_true', dest="verbose", help='Print performance details.')
-
     args = parser.parse_args()
 
     # load, download, and transcribe
