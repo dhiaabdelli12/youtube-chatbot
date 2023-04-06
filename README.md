@@ -18,18 +18,53 @@ conda activate video-to-text
 pip -r requirements.txt
 cd scripts/
 ```
+Install FFmpeg:
+- On Ubuntu: 
+    ```bash 
+    sudo apt-get install ffmpeg
+    ```
+- On Windows: 
+      - Download the latest static build of FFmpeg from the official website: https://ffmpeg.org/download.html#build-windows
+      - Extract the downloaded ZIP file to a folder on your system.
+      - Add the path to the bin folder of the extracted FFmpeg to your system's PATH environment variable
 
 ## Usage
-The script is fairly simple to use. You need just to specify the source of your content.
 
-To specify the youtube url as your source run the following command
-```SHELL
-python main.py --from-youtube
-``` 
-You will be asked to provide the youtube url.
+### Transcription
 
-If you hava an audio file. Place it in resources/audio/ directory and then run this command
-```SHELL
-python main.py --from-audio
-``` 
-You will be asked to provide the audio file name.
+- Transcribe videos from the urls JSON file in data folder using the following command:
+```bash 
+python transcribe.py
+```
+- Transcribe videos that have already been downloaded locally and stored in the folder data/videos using the following command:
+```bash 
+python transcribe.py --locally
+```
+- Transcribe a Youtube playlist using the following command:
+```bash 
+python transcribe.py --playlist YT_PLAYLIST_URL
+```
+
+- Transcribe a single Youtube Video using the following command:
+```bash 
+python transcribe.py --url YT_VIDEO_URL
+```
+
+
+#### Additional Options
+
+- `--res`: The resolution of the video(s) to download (default: 360).
+- `--no-save`: Add this to delete the video(s) after transcription.
+
+#### Configuration
+
+The tool uses the following paths:
+
+- `input_path`: The path to the input file (default: `data/urls.json`).
+- `videos_path`: The path to the folder where the videos are saved (default: `data/videos`).
+- `output_path`: The path to the output file (default: `data/output.json`).
+
+The tool also uses the Whisper's small model. The size of the small model is ~461M. You can change it in the code to use the base or another model.
+
+- `model_name`: The name of the Whisper model to use (default: `small`).
+
