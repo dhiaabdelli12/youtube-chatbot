@@ -6,7 +6,9 @@ src/__pycache__/
 results.json 
 cache_dir
 data/output.json
+resources/output.json
 data/videos/[^.g]*
+resources/videos/[^.g]*
 runs
 venv
 # C extensions
