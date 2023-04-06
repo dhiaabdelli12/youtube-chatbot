@@ -14,6 +14,7 @@ conda create --name video-to-text python=3.9
 conda activate video-to-text 
 ```
 ### Dependencies
+Install the required Python packages:
 ```
 pip -r requirements.txt
 cd scripts/
@@ -60,9 +61,9 @@ python transcribe.py --url YT_VIDEO_URL
 
 The tool uses the following paths:
 
-- `input_path`: The path to the input file (default: `data/urls.json`).
-- `videos_path`: The path to the folder where the videos are saved (default: `data/videos`).
-- `output_path`: The path to the output file (default: `data/output.json`).
+- `input_path`: The path to the input file (default: `resources/urls.json`).
+- `videos_path`: The path to the folder where the videos are saved (default: `resources/videos`).
+- `output_path`: The path to the output file (default: `resources/output.json`).
 
 The tool also uses the Whisper's small model. The size of the small model is ~461M. You can change it in the code to use the base or another model.
 
