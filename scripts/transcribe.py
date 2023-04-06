@@ -92,10 +92,10 @@ if __name__ == "__main__":
             video = download(url, args.res, videos_path)
         video_path = os.path.join(videos_path, video["filename"])
         transcript = transcribe(model, video_path, args.save)
-        data[url] = {"title":video["title"], "transcription":transcript}
+        data = {"title":video["title"], "url":url,"transcription":transcript}
 
     # save output to json
-    with open(os.path.join(output_path,'output.txt'), 'w') as f:
+    with open(os.path.join(output_path,'output.json'), 'w') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 
