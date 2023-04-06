@@ -4,6 +4,7 @@ import argparse
 import json
 import re
 import whisper
+from settings import *
 
 def extract_video_id(url):
     pattern = r'(?:https?:\/\/)?(?:www\.)?youtu(?:\.be|be\.com)\/(?:.*v(?:\/|=)|(?:.*\/)?)([\w\-]+)'
@@ -48,8 +49,8 @@ if __name__ == "__main__":
 
     # paths
     input_path = "../resources/urls.json"
-    videos_path = "../resources/videos"
-    output_path = "../resources/output.json"
+    videos_path = VIDEOS_DIR
+    output_path = TRANSCRIPTIONS_DIR
 
     # model 
     # multilingual models: "tiny", "base" 74M params, "small" 244M params, "medium", "large"
@@ -94,7 +95,7 @@ if __name__ == "__main__":
         data[url] = {"title":video["title"], "transcription":transcript}
 
     # save output to json
-    with open(output_path, 'w') as f:
+    with open(os.path.join(output_path,'output.txt'), 'w') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 
