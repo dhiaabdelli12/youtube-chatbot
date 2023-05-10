@@ -1,4 +1,41 @@
-from transformers import PegasusForConditionalGeneration, PegasusTokenizer
+# let's get a dataset
+import pandas as pd
+from simplet5 import SimpleT5
+df=pd.read_csv('./resources/train/train.csv')
+df = df.rename(columns={"summary":"target_text", "dialogue":"source_text"})
+df = df[['source_text', 'target_text']]
+
+df['source_text'] = "abstractive summarization: " + df['source_text']
+from sklearn.model_selection import train_test_split
+train_df, test_df = train_test_split(df, test_size=0.2)
+
+model = SimpleT5()
+model.from_pretrained(model_type="t5", model_name="t5-base")
+model.train(train_df=train_df[:5000],
+            eval_df=test_df[:100], 
+            source_max_token_len=180, 
+            target_max_token_len=100, 
+            batch_size=8, max_epochs=4)
+model.load_model("/content/outputs/simplet5-epoch-3-train-loss-1.2929-val-loss-1.8517", use_gpu=True)
+
+text_to_summarize="summarize: L’intelligence artificielle (IA) désigne une technologie produite par des êtres humains, qui traite systématiquement de grands ensembles de données selon un modèle itératif. Cela lui permet de prédire des résultats, en générant des réponses mathématiques ou linguistiques aux demandes de l’utilisateur. Elle détecte des formes ou « patterns » dans d’énormes volumes de données brutes, appelées données d’apprentissage, pour créer un modèle. Elle teste ensuite son modèle en posant une question dont elle connaît déjà la réponse et en analysant la précision de sa réponse. Les données générées par l’IA sont appelées données de test. Au fil du temps, à mesure qu’elle multiplie les entrées et les données de test, elle apprend et itère de mieux en mieux sur ce modèle"
+model.predict(text_to_summarize)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""from transformers import PegasusForConditionalGeneration, PegasusTokenizer
 import torch
 import os
 
@@ -41,3 +78,4 @@ if os.path.exists(file_path):
 else:
     print(f"Error: {file_path} not found")
 
+"""
