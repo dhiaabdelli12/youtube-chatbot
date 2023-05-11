@@ -59,12 +59,7 @@ Epochs: 20, Learning Rate: 5e-5, Batch Size: 8, Optimizer: AdamW
 | + Dynamic Quantization | - | - | 0.2880 | 0.9240 | 110M | 176 Mb |
 
 
-- Fine-tuning on French keywords extraction using pre-fine-tuned CamemBERT on Sentences Similarity task.
 
-| Model | Training Loss | Training Accuracy | Validation Loss | Validation Accuracy | Params | Size(Mb) |
-| --- | --- | --- | --- | --- | --- | --- |
-| Finetuned Prefinetuned CamemBERT | - | - | - | - | 110M | - |
-| + Dynamic Quantization | - | - | - | - | 110M | - |
 
 
 ## Setup
