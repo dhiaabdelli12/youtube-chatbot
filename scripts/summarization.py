@@ -11,7 +11,17 @@ train_df, test_df = train_test_split(df, test_size=0.2)
 
 model = SimpleT5()
 model.from_pretrained(model_type="t5", model_name="t5-base")
-model.train(train_df=train_df[:5000],
+# defining the different prompting methods
+
+template_prompt = {"method":"template prompting","text":"Given the following text, give an abstractive summary : "}
+conditional_prompt = {"method":"conditional prompting","text":"If the text contains famous names use it in summary "}
+
+prompts = [template_prompt,conditional_prompt]
+
+for prp in prompts:
+    print(prp['method'])
+
+    model.train(train_df=train_df[:5000],
             eval_df=test_df[:100], 
             source_max_token_len=180, 
             target_max_token_len=100, 
