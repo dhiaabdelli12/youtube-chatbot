@@ -27,6 +27,7 @@ parser = argparse.ArgumentParser(description='Question answering Training Script
 
 parser.add_argument('-t', '--task', type=str, help='Training task')
 parser.add_argument('-e', '--epochs', type=int, help='Number of training epochs')
+parser.add_argument('-q', '--quantize',  action='store_true', help='Quantizing model')
 
 args = parser.parse_args()
 
@@ -44,6 +45,7 @@ class QAModel(nn.Module):
     def __init__(self):
         super(QAModel, self).__init__()
         self.bert = DistilBertModel.from_pretrained(os.path.join(MODELS_DIR,'intent_classification_model'))
+        #self.bert = DistilBertModel.from_pretrained('distilbert-base-uncased')
         self.fc = nn.Linear(self.bert.config.hidden_size, 2) 
 
     def forward(self, input_ids, attention_mask):
@@ -61,7 +63,7 @@ class QAModel(nn.Module):
 class ProcessedDataset(Dataset):
     def __init__(self, raw_dataset):
         self.raw_dataset = raw_dataset
-        self.processed = preprocess(self.raw_dataset, max_length=384, stride=128)
+        self.processed = preprocess(self.raw_dataset, max_length=512, stride=128)
 
         self.input_ids = self.processed['input_ids']
         self.token_type_ids = self.processed['token_type_ids']
@@ -300,6 +302,7 @@ if __name__ == '__main__':
 
     task = args.task
     epochs = args.epochs
+    quantize = args.quantize
 
 
     if epochs is None:
@@ -323,7 +326,15 @@ if __name__ == '__main__':
 
         model = finetune_bert(model,train_loader,num_epochs=epochs, learning_rate=2e-5)
 
-        torch.save(model.state_dict(), os.path.join(MODELS_DIR,'custom_model_fquad_distilbert.pth'))
+        if quantize == True:
+            quantized_model = torch.quantization.quantize_dynamic(
+            model , {torch.nn.Linear}, dtype=torch.qint8
+                )
+            torch.save(quantized_model.state_dict(), os.path.join(MODELS_DIR,'quantized_custom_model_fquad_distilbert.pth'))
+        else:
+            torch.save(model.state_dict(), os.path.join(MODELS_DIR,'custom_model_fquad_distilbert.pth'))
+
+        
     elif task == 'pre-finetune':
         num_classes = 150
         model = DistilBertForSequenceClassification.from_pretrained('distilbert-base-uncased')
@@ -336,8 +347,7 @@ if __name__ == '__main__':
 
 
         model = pre_finetune(model,ic_dataloader,num_epochs=epochs,learning_rate=2e-5)
-
-        model.save_pretrained('intent_classification_model')
+        model.save_pretrained(os.path.join(MODELS_DIR,'intent_classification_model'))
     else:
         print('Not a valid task')
 
