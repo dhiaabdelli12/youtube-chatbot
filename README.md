@@ -1,11 +1,69 @@
 # Video To Text
+## Results
 
-This script allows you to input a video url and then ask questions about the content that's in the video.
-The way this is achieved is by automating the following process:
-- Downloading the youtube video
-- Converting it to an audio file (wav)
-- Transcribing the audio file into text
-- Using camemBERT language model for question answering
+## Results
+
+- Pre-fine-tuning CamemBERT on Sentences Similarity task using PAWS-C french dataset. 
+
+
+### Summarization
+
+| Model | Rouge-1 (Recall) | Loss
+| --- | --- | --- |
+| Pegasus - 0-shot| 0.43 | - |
+| Pegasus - 0-shot quantized | 0.42 | - |
+| Pegasus - finetuned | 0.7 | - |
+| Pegasus - finetuned quantized | 0.65 | - |
+| ProphetNet | - | 1.9 |
+| ProphetNet quantized | - | 2.1 |
+| T5 | - | 2.02 |
+| T5 instruction-tuned | - | 1.13 |
+| T5 instruction-tuned + prompt engineering | - | 0.87 |
+
+
+### Question Answering
+| Model | EM (Exact Match) | F1 | Loss
+| Camembert | 66.2 | 63 | 2.34
+| Camembert quantized | 34 | 30 | 20
+| DistilBert finetuned fquad | 29 | 28 | 12.4
+| Distilbert finteuned fquad + pre-finetuned | 29.3 | 28 | 11
+
+
+### Sentiment Analysis
+| Model | Accuracy |
+| Bert for Sequence Classification | 0.97 |
+| Bert for Sequence Classification quantized | 0.9 |
+| DistilBert for Sequence Classification | 0.95 |
+| DistilBert for Sequence Classification quantized | 0.88 |
+
+
+### Keywords Extraction
+
+Epochs: 1 , Learning Rate: 3e-5, Batch Size: 16, Optimizer: AdamW
+
+| Model | Validation F1-score | Validation Accuracy | Params | Size(Mb) |
+| --- | --- | --- | --- | --- | 
+| Prefinetuned CamemBERT | 0.9056 | 0.906 | 110M | 442 Mb |
+| + Dynamic Quantization | 0.3253 | 0.453 | 110M | 186 Mb |
+
+- Fine-tuning CamemBERT for French keywords extraction.
+
+
+Epochs: 20, Learning Rate: 5e-5, Batch Size: 8, Optimizer: AdamW
+
+| Model | Training Loss | Training Accuracy | Validation Loss | Validation Accuracy | Params | Size(Mb) |
+| --- | --- | --- | --- | --- | --- | --- |
+| Finetuned CamemBERT | 0.0016 | 0.9996 | 0.09359 | 0.9859 | 110M | 419 Mb |
+| + Dynamic Quantization | - | - | 0.2880 | 0.9240 | 110M | 176 Mb |
+
+
+- Fine-tuning on French keywords extraction using pre-fine-tuned CamemBERT on Sentences Similarity task.
+
+| Model | Training Loss | Training Accuracy | Validation Loss | Validation Accuracy | Params | Size(Mb) |
+| --- | --- | --- | --- | --- | --- | --- |
+| Finetuned Prefinetuned CamemBERT | - | - | - | - | 110M | - |
+| + Dynamic Quantization | - | - | - | - | 110M | - |
+
 
 ## Setup
 ### Virtual environement
