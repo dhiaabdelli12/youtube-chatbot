@@ -23,6 +23,7 @@
 
 ### Question Answering
 | Model | EM (Exact Match) | F1 | Loss
+| --- | --- | --- | ---
 | Camembert | 66.2 | 63 | 2.34
 | Camembert quantized | 34 | 30 | 20
 | DistilBert finetuned fquad | 29 | 28 | 12.4
