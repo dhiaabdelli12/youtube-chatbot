@@ -1,8 +1,6 @@
 # Video To Text
 ## Results
 
-## Results
-
 - Pre-fine-tuning CamemBERT on Sentences Similarity task using PAWS-C french dataset. 
 
 
