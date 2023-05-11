@@ -31,8 +31,8 @@
 
 
 ### Sentiment Analysis
-| --- | --- 
 | Model | Accuracy |
+| --- | --- 
 | Bert for Sequence Classification | 0.97 |
 | Bert for Sequence Classification quantized | 0.9 |
 | DistilBert for Sequence Classification | 0.95 |
