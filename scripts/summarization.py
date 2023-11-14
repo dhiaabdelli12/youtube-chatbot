@@ -15,19 +15,15 @@ model.from_pretrained(model_type="t5", model_name="t5-base")
 # defining the different prompting methods
 template_prompt = {"method":"template prompting","text":"Given the following text, give an abstractive summary : "}
 conditional_prompt = {"method":"conditional prompting","text":"If the text contains celebrity name use that name in summary "}
-
 prompts = [template_prompt,conditional_prompt]
-
 for prp in prompts:
     print(prp['method'])
-
     model.train(train_df=train_df[:5000],
             eval_df=test_df[:100], 
             source_max_token_len=180, 
             target_max_token_len=100, 
             batch_size=8, max_epochs=4)
 model.load_model("/content/outputs/simplet5-epoch-3-train-loss-1.2929-val-loss-1.8517", use_gpu=True)
-
 text_to_summarize="summarize: L’intelligence artificielle (IA) désigne une technologie produite par des êtres humains, qui traite systématiquement de grands ensembles de données selon un modèle itératif. Cela lui permet de prédire des résultats, en générant des réponses mathématiques ou linguistiques aux demandes de l’utilisateur. Elle détecte des formes ou « patterns » dans d’énormes volumes de données brutes, appelées données d’apprentissage, pour créer un modèle. Elle teste ensuite son modèle en posant une question dont elle connaît déjà la réponse et en analysant la précision de sa réponse. Les données générées par l’IA sont appelées données de test. Au fil du temps, à mesure qu’elle multiplie les entrées et les données de test, elle apprend et itère de mieux en mieux sur ce modèle"
 model.predict(text_to_summarize)
 
