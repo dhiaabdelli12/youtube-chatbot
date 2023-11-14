@@ -14,7 +14,7 @@ model.from_pretrained(model_type="t5", model_name="t5-base")
 
 # defining the different prompting methods
 template_prompt = {"method":"template prompting","text":"Given the following text, give an abstractive summary : "}
-conditional_prompt = {"method":"conditional prompting","text":"If the text contains famous names use it in summary "}
+conditional_prompt = {"method":"conditional prompting","text":"If the text contains celebrity name use that name in summary "}
 
 prompts = [template_prompt,conditional_prompt]
 
