@@ -1,18 +1,18 @@
-# let's get a dataset
 import pandas as pd
 from simplet5 import SimpleT5
+from sklearn.model_selection import train_test_split
+
+
 df=pd.read_csv('./resources/train/train.csv')
 df = df.rename(columns={"summary":"target_text", "dialogue":"source_text"})
 df = df[['source_text', 'target_text']]
-
 df['source_text'] = "abstractive summarization: " + df['source_text']
-from sklearn.model_selection import train_test_split
 train_df, test_df = train_test_split(df, test_size=0.2)
 
 model = SimpleT5()
 model.from_pretrained(model_type="t5", model_name="t5-base")
-# defining the different prompting methods
 
+# defining the different prompting methods
 template_prompt = {"method":"template prompting","text":"Given the following text, give an abstractive summary : "}
 conditional_prompt = {"method":"conditional prompting","text":"If the text contains famous names use it in summary "}
 
