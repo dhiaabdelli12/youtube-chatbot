@@ -6,7 +6,7 @@
 
 ### Summarization
 
-| Model | Rouge-1 (Recall) | Loss
+| Model | Rouge-2 (Recall) | Loss
 | --- | --- | --- |
 | Pegasus - 0-shot| 0.43 | - |
 | Pegasus - 0-shot quantized | 0.42 | - |
